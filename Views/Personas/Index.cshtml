@@ -1,0 +1,25 @@
+﻿
+@{
+
+@model ProfesoresViewModel;
+@using WebInstituto.ViewMoldels;
+@using WebInstituto.ViewMoldels.Personas
+}
+<script type="module" src="~/js/viewProfesores.js"></script>
+<link rel="stylesheet" type="text/css" href="~/css/vistas.css" />
+<h1>@Model.PageTitle</h1>
+
+<table id="tablaProfesores">
+    <tr>
+        <th id="nombreProfesores">Nombre</th>
+        <th id="apellidosProfesores">Apellidos</th>
+    </tr>
+    @foreach (PersonaViewModel persona in Model.Profesores)
+    {
+        <tr>
+            <td>@persona.Name</td>
+            <td>@persona.LastName</td>
+        </tr>
+    }
+</table>
+

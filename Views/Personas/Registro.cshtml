@@ -1,0 +1,52 @@
+﻿@{
+    @model WebInstituto.ViewModels.Personas.RegistroViewModel
+}
+
+<h2>Registro</h2>
+
+<form method="post" asp-action="RegistroSave" asp-controller="Login">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="Name">Nombre</label>
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", required = "required" })
+    </div>
+
+    <div class="form-group">
+        <label for="LastName">Apellidos</label>
+        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", required = "required" })
+    </div>
+
+    <div class="form-group">
+        <label for="EmergencyPhone">Teléfono</label>
+        @Html.TextBoxFor(m => m.EmergencyPhone, new { @class = "form-control", required = "required" })
+    </div>
+
+    <div class="form-group">
+        <label for="Mail">Correo Electrónico</label>
+        @Html.TextBoxFor(m => m.Mail, new { @type = "email", @class = "form-control", required = "required" })
+    </div>
+
+    <div class="form-group">
+        <label for="ContrasenyaHash">Contraseña</label>
+        @Html.PasswordFor(m => m.ContrasenyaHash, new { @class = "form-control", required = "required" })
+    </div>
+
+    <div class="form-group">
+        <label for="Teacher">¿Es profesor?</label>
+        @Html.DropDownListFor(m => m.Teacher, new SelectList(new List<SelectListItem>
+        {
+            new SelectListItem { Text = "Alumno", Value = "0" },
+            new SelectListItem { Text = "Profesor", Value = "1" }
+        }, "Value", "Text"), "Selecciona una opción", new { @class = "form-control" })
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary">Registrar</button>
+    </div>
+</form>
+
+
+
+
+

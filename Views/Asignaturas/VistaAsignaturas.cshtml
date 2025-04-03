@@ -1,0 +1,45 @@
+﻿@{
+    @using WebInstituto.ViewModels.Asignaturas
+    @model AsignaturasViewModel
+}
+
+<link rel="stylesheet" type="text/css" href="~/css/vistas.css" />
+
+@if (Model.EsProfesor)
+{
+        <h1>Vista Profesores</h1>
+        <table id="tablaAsignaturaProfesores">
+            <tr>
+                <th>Nombre</th>
+                <th>Curso</th>
+                <th>Horarios</th>
+                <th>Impartir</th>
+                <th>Editar</th>
+            </tr>
+        @foreach (Asignatura asignatura in Model.Asignaturas)
+        {
+                    <tr>
+                        <td> @asignatura.Name</td>
+                        <td>@asignatura.Course</td>
+                        <td></td>
+                        <td></td>
+                        <td> <button>Editar</button><button>Eliminar</button></td>
+                    </tr>
+        }
+
+        </table>
+    @Html.ActionLink("Crear Asignatura", "FormAsignaturaCrear", "Asignaturas")
+}
+else
+{
+        <h1>Vista Alumno</h1>
+        <table id="tablaAsignaturaProfesores">
+            <tr>
+                <th id="nombreAsignatura">Nombre</th>
+                <th id="cursoAsignatura">Curso</th>
+                <th>Matricularse</th>
+                <th>Horarios</th>
+            </tr>
+
+        </table>
+}

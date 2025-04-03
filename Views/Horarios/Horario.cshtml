@@ -1,0 +1,45 @@
+﻿@{
+@model HorariosViewModel;
+@using WebInstituto.ViewModels.Horarios;
+}
+<link rel="stylesheet" type="text/css" href="~/css/vistas.css" />
+<h1>@Model.PageTitle</h1>
+
+<table id="tablaHorario">
+    <tr>
+        <th id="diaHorario">Día</th>
+        <th id="inicioHorario">Inicio</th>
+        <th id="finHorario">Fin</th>
+    </tr>
+    @foreach (HorarioViewModel horario in Model.Horarios)
+    {
+        <tr>
+            @switch(@horario.Day)
+            {
+                case 1:
+                    <td>Lunes</td>
+                    break;
+                case 2:
+                    <td>Martes</td>
+                    break;
+                case 3:
+                    <td>Miercoles</td>
+                    break;
+                case 4:
+                    <td>Jueves</td>
+                    break;
+                case 5:
+                    <td>Viernes</td>
+                    break;
+                default:
+                    <td>Fin de semana</td>
+                    break;
+            }
+            <td>@horario.Start</td>
+            <td>@horario.End</td>
+        </tr>
+    }
+</table>
+<button onclick="window.location.href='@Url.Action("FormularioCrearHorario", "Horarios", new { asignaturaId = Model.AsignaturaId })'">
+    Crear Horario
+</button>

@@ -1,0 +1,20 @@
+﻿@{
+    @model HorarioViewModel;
+    @using WebInstituto.ViewModels.Horarios;
+}
+
+<h1></h1>
+<form>
+    <label>Día de la semana:</label>
+    <select>
+        @foreach (var dia in Model.DiasSemanales)
+        {
+            <option value="@dia.Value">@dia.Text</option>
+        }
+    </select><br />
+    <label>Hora de incio</label>
+    <input /><br />
+    <label>Hora de fin</label>
+    <input /><br />
+    <button>Crear</button>
+</form>
