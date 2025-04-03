@@ -4,38 +4,25 @@
     font-family: sans-serif;
 }
 table {
+    margin: auto;
     border: 2px solid black;
     text-align: center;
-    height: 100%;
-    width: 100%;
+    height: 80%;
+    width: 80%;
     font-family: sans-serif;
 }
 td {
+    margin: auto;
     border: 1px solid black;
     font-family: sans-serif;
 }
 
 th {
+    margin: auto;
     font-weight: bold;
     border: 2px solid black;
     background-color: aquamarine;
-    font-family:sans-serif;
-}
-button {
-    background-color: green; 
-    color: white; 
-    padding: 10px 20px; 
-    border: none; 
-    border-radius: 5px; 
-    cursor: pointer; 
-    font-size: 16px; 
-    margin-top: 20px; 
-    display: block;
-    width: 200px;
-    margin-left: auto;
-    margin-right: auto;
+    font-family: sans-serif;
 }
 
-button:hover {
-    background-color: #45a049;
-}
+

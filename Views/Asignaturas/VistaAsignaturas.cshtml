@@ -21,14 +21,23 @@
                     <tr>
                         <td> @asignatura.Name</td>
                         <td>@asignatura.Course</td>
-                        <td></td>
-                        <td></td>
-                        <td> <button>Editar</button><button>Eliminar</button></td>
+                        <td>
+                            <button class="btn btn-primary" onclick="window.location.href='@Url.Action("Horario", "Horarios", new { id = asignatura.Id })'">
+                                Ver Horario
+                            </button>
+                        </td>
+                        <td>
+                            @Html.CheckBox("MiCheckbox", false) 
+                        </td>
+                        <td> 
+                            <button id="btn-asignatura-editar" class="btn btn-success">Editar</button>
+                            <button id="btn-asignatura-eliminar" class="btn btn-danger">Eliminar</button>
+                        </td>
                     </tr>
         }
 
         </table>
-    @Html.ActionLink("Crear Asignatura", "FormAsignaturaCrear", "Asignaturas")
+    @Html.ActionLink("Crear Asignatura", "FormAsignaturaCrear", "Asignaturas", new { @class = "center-link" })
 }
 else
 {
