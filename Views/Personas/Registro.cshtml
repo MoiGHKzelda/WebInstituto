@@ -1,52 +1,55 @@
-﻿@{
-    @model WebInstituto.ViewModels.Personas.RegistroViewModel
-}
+﻿@model WebInstituto.ViewModels.Personas.RegistroViewModel
 
-<h2>Registro</h2>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
-<form method="post" asp-action="RegistroSave" asp-controller="Login">
-    @Html.AntiForgeryToken()
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
 
-    <div class="form-group">
-        <label for="Name">Nombre</label>
-        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", required = "required" })
+            <h2 class="text-center mb-4">Registro</h2>
+
+            <form method="post" asp-action="RegistroSave" asp-controller="Login">
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Nombre</label>
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", required = "required", placeholder = "Tu nombre" })
+                </div>
+
+                <div class="mb-3">
+                    <label for="LastName" class="form-label">Apellidos</label>
+                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", required = "required", placeholder = "Tus apellidos" })
+                </div>
+
+                <div class="mb-3">
+                    <label for="EmergencyPhone" class="form-label">Teléfono</label>
+                    @Html.TextBoxFor(m => m.EmergencyPhone, new { @class = "form-control", required = "required", placeholder = "123456789" })
+                </div>
+
+                <div class="mb-3">
+                    <label for="Mail" class="form-label">Correo Electrónico</label>
+                    @Html.TextBoxFor(m => m.Mail, new { @type = "email", @class = "form-control", required = "required", placeholder = "ejemplo@correo.com" })
+                </div>
+
+                <div class="mb-3">
+                    <label for="ContrasenyaHash" class="form-label">Contraseña</label>
+                    @Html.PasswordFor(m => m.ContrasenyaHash, new { @class = "form-control", required = "required"})
+                </div>
+
+                <div class="mb-4">
+                    <label for="Teacher" class="form-label">¿Es profesor?</label>
+                    @Html.DropDownListFor(m => m.Teacher, new SelectList(new List<SelectListItem>
+                    {
+                    new SelectListItem { Text = "Alumno", Value = "0" },
+                    new SelectListItem { Text = "Profesor", Value = "1" }
+                    }, "Value", "Text"), "Selecciona una opción", new { @class = "form-select", required = "required" })
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </div>
+            </form>
+
+        </div>
     </div>
-
-    <div class="form-group">
-        <label for="LastName">Apellidos</label>
-        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", required = "required" })
-    </div>
-
-    <div class="form-group">
-        <label for="EmergencyPhone">Teléfono</label>
-        @Html.TextBoxFor(m => m.EmergencyPhone, new { @class = "form-control", required = "required" })
-    </div>
-
-    <div class="form-group">
-        <label for="Mail">Correo Electrónico</label>
-        @Html.TextBoxFor(m => m.Mail, new { @type = "email", @class = "form-control", required = "required" })
-    </div>
-
-    <div class="form-group">
-        <label for="ContrasenyaHash">Contraseña</label>
-        @Html.PasswordFor(m => m.ContrasenyaHash, new { @class = "form-control", required = "required" })
-    </div>
-
-    <div class="form-group">
-        <label for="Teacher">¿Es profesor?</label>
-        @Html.DropDownListFor(m => m.Teacher, new SelectList(new List<SelectListItem>
-        {
-            new SelectListItem { Text = "Alumno", Value = "0" },
-            new SelectListItem { Text = "Profesor", Value = "1" }
-        }, "Value", "Text"), "Selecciona una opción", new { @class = "form-control" })
-    </div>
-
-    <div class="form-group mt-3">
-        <button type="submit" class="btn btn-primary">Registrar</button>
-    </div>
-</form>
-
-
-
-
-
+</div>

@@ -43,6 +43,11 @@ namespace WebInstituto.Services
             }
             return false;
         }
+        //Mail profesor
+        public string GetMailPersona()
+        {
+            return _httpContextAccessor.HttpContext.Session.GetString("email");
+        }
         // Redirigir si no está logueado
         public IActionResult NoLogin()
         {

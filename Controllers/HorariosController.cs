@@ -12,7 +12,7 @@ namespace WebInstituto.Controllers
     public class HorariosController : Controller
     {
         private readonly RepoHorario repoHorarios;
-        private readonly RepoAsignaturas repoAsignaturas; // Iniciar el repositorio de asignaturas
+        private readonly RepoAsignaturas repoAsignaturas;
 
         public HorariosController()
         {
@@ -34,11 +34,10 @@ namespace WebInstituto.Controllers
             // Obtener la asignatura correspondiente
             Asignatura asignatura = repoAsignaturas.GetById(id);
 
-
             // Almacenar horarios al ViewModel
             IList<HorarioViewModel> horariosViewModel = horarios.Select(h => new HorarioViewModel
             {
-                SubjectHorario = h.Asignatura,
+                Asignatura = h.Asignatura,
                 Day = h.Day,
                 Start = h.Start,
                 End = h.End
@@ -58,27 +57,50 @@ namespace WebInstituto.Controllers
         public ActionResult FormularioCrearHorario(int asignaturaId)
         {
             IList<Asignatura> asignaturas = repoAsignaturas.GetAll();
-            Asignatura asignaturaEncontrada = new Asignatura();
-            foreach (Asignatura a in asignaturas)
+            Asignatura asignaturaEncontrada = asignaturas.FirstOrDefault(a=>a.Id==asignaturaId);
+
+            FormularioHorarioViewModel viewModel = new FormularioHorarioViewModel()
             {
-                if (a.Id == asignaturaId)
+                HorarioLectivo = new List<SelectListItem>
                 {
-                    asignaturaEncontrada = a;
-                }
-            }
-            HorarioViewModel viewModel = new HorarioViewModel()
-            {
-                SubjectHorario = asignaturaEncontrada,
-                DiasSemanales = new List<SelectListItem>
+                    new SelectListItem{Value="08:00", Text="08:00"},
+                    new SelectListItem{Value="08:30", Text="08:30"},
+                    new SelectListItem{Value="09:00", Text="09:00"},
+                    new SelectListItem{Value="09:30", Text="09:30"},
+                    new SelectListItem{Value="10:00", Text="10:00"},
+                    new SelectListItem{Value="10:30", Text="10:30"},
+                    new SelectListItem{Value="11:00", Text="11:00"},
+                    new SelectListItem{Value="11:30", Text="11:30"},
+                    new SelectListItem{Value="12:00", Text="12:00"},
+                    new SelectListItem{Value="12:30", Text="12:30"},
+                    new SelectListItem{Value="13:00", Text="13:00"},
+                    new SelectListItem{Value="13:30", Text="13:30"},
+                    new SelectListItem{Value="14:00", Text="14:00"},
+                    new SelectListItem{Value="14:30", Text="14:30"},
+                    new SelectListItem{Value="15:00", Text="15:00"}
+                },
+                Asignatura = asignaturaEncontrada,
+                
+                 DiasSemanales = Enum.GetValues(typeof(DiasSemana)).Cast<DiasSemana>().Select(d => new SelectListItem
                 {
-                    new SelectListItem{Value=DiasSemana.Lunes.ToString(), Text="Lunes"},
-                    new SelectListItem{Value=DiasSemana.Martes.ToString(), Text="Martes" },
-                    new SelectListItem{Value=DiasSemana.Miercoles.ToString(), Text="Miércoles" },
-                    new SelectListItem{Value=DiasSemana.Jueves.ToString(), Text="Jueves" },
-                    new SelectListItem{Value=DiasSemana.Viernes.ToString(), Text="Viernes" }
-                }
-            };
+                    Text = d.ToString(),
+                    Value = ((int)d).ToString()
+                }).ToList()
+        };
             return View(viewModel);
+        }
+        public ActionResult CrearHorario(HorarioViewModel horarioViewModel)
+        {
+            Horario horario = new Horario
+            {
+                Day = horarioViewModel.Day,
+                Start = horarioViewModel.Start,
+                End = horarioViewModel.End,
+                AsignaturaId = horarioViewModel.AsignaturaId
+            };
+
+            repoHorarios.CrearHorario(horario);
+            return RedirectToAction("VistaAsignatura", "Asignaturas", new { id = horarioViewModel.AsignaturaId });
         }
     }
 }

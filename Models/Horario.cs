@@ -16,7 +16,7 @@ namespace WebInstituto.Models
 
         // Relación con la asignatura
         [ForeignKey("AsignaturaId")]
-        public Asignatura Asignatura { get; set; }  // Relacionamos con 'Asignatura'
+        public virtual Asignatura Asignatura { get; set; }  // Relacionamos con 'Asignatura'
 
         public Horario() { }
     }

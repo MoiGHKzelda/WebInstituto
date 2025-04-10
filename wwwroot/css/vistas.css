@@ -1,28 +1,13 @@
-﻿h1 {
-    text-align: center;
-    font-weight: bold;
-    font-family: sans-serif;
-}
-table {
-    margin: auto;
-    border: 2px solid black;
-    text-align: center;
-    height: 80%;
-    width: 80%;
-    font-family: sans-serif;
-}
-td {
-    margin: auto;
-    border: 1px solid black;
-    font-family: sans-serif;
+﻿body {
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-th {
-    margin: auto;
-    font-weight: bold;
-    border: 2px solid black;
-    background-color: aquamarine;
-    font-family: sans-serif;
+#tablaAsignaturaProfesores td.no-border {
+    border: none !important;
+    background-color: transparent !important;
 }
-
 

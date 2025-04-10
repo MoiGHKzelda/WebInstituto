@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebInstituto.Models;
 using WebInstituto.Repositorios;
+using WebInstituto.ViewModels.Personas;
 using WebInstituto.ViewMoldels.Personas;
 
 namespace WebInstituto.Controllers
@@ -9,35 +10,21 @@ namespace WebInstituto.Controllers
     {
 
         private readonly RepoPersonas repoPersonas; // Iniciar el repositorio de personas
+        private readonly RepoAsignaturas repoAsignaturas;
         public PersonasController() 
         {
             DBSqlite db = new DBSqlite();
             this.repoPersonas = new RepoPersonas(db);
+            this.repoAsignaturas = new RepoAsignaturas(db);
         }
-        public IActionResult Index()
+        public IActionResult ListadoAlumno(int asignaturaId)
         {
-            // Obtener todas las asignaturas
-            IList<Persona> personas = repoPersonas.GetAll();
-            IList<PersonaViewModel> personasViewModel= new List<PersonaViewModel>();
-            // Almacenar horarios al ViewModel
-            foreach (Persona persona in personas)
+            Asignatura asignatura = repoAsignaturas.GetById(asignaturaId);
+            ListadoAlumnoViewModel viewModel = new ListadoAlumnoViewModel()
             {
-                PersonaViewModel personaViewModel = new PersonaViewModel()
-                {
-                    Name = persona.Name,
-                    LastName = persona.LastName
-                };
-                personasViewModel.Add(personaViewModel);
-            }
-
-            // viemModel final que se enviará a la vista
-            ProfesoresViewModel viewModel = new ProfesoresViewModel()
-            {
-                Profesores=personasViewModel,
-                PageTitle = "Vista Persona"
+                Asignatura = asignatura
             };
-            ViewData["Title"] = "Vista Persona";
-            return View(viewModel);
+            return View("~/Views/Personas/ListadoAlumno.cshtml", viewModel);
         }
     }
 }

@@ -3,52 +3,60 @@
     @model AsignaturasViewModel
 }
 
-<link rel="stylesheet" type="text/css" href="~/css/vistas.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/vistaAsignaturas.css">
 
-@if (Model.EsProfesor)
-{
-        <h1>Vista Profesores</h1>
-        <table id="tablaAsignaturaProfesores">
-            <tr>
-                <th>Nombre</th>
-                <th>Curso</th>
-                <th>Horarios</th>
-                <th>Impartir</th>
-                <th>Editar</th>
-            </tr>
-        @foreach (Asignatura asignatura in Model.Asignaturas)
-        {
+
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Asignaturas</h1>
+
+    <div class="d-flex justify-content-center">
+        <table class="table table-bordered w-auto text-center" id="tablaAsignaturaProfesores">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 150px;">Nombre</th>
+                    <th style="width: 100px;">Curso</th>
+                    <th style="width: 200px;">Información</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Asignaturas == null || !Model.Asignaturas.Any())
+                {
                     <tr>
-                        <td> @asignatura.Name</td>
-                        <td>@asignatura.Course</td>
-                        <td>
-                            <button class="btn btn-primary" onclick="window.location.href='@Url.Action("Horario", "Horarios", new { id = asignatura.Id })'">
-                                Ver Horario
-                            </button>
-                        </td>
-                        <td>
-                            @Html.CheckBox("MiCheckbox", false) 
-                        </td>
-                        <td> 
-                            <button id="btn-asignatura-editar" class="btn btn-success">Editar</button>
-                            <button id="btn-asignatura-eliminar" class="btn btn-danger">Eliminar</button>
-                        </td>
+                        <td colspan="3">No hay Asignaturas disponibles</td>
                     </tr>
-        }
-
+                }
+                else
+                {
+                    @foreach (Asignatura asignatura in Model.Asignaturas)
+                    {
+                        <tr>                      
+                            <td>@asignatura.Name</td>
+                            <td>@asignatura.Course</td>
+                            <td>
+                                <button class="btn btn-info" onclick="window.location.href='@Url.Action("VistaAsignatura", "Asignaturas", new { id = asignatura.Id })'">
+                                    Ver Información
+                                </button>
+                            </td>
+                            @if (Model.EsProfesor)
+                            {
+                                <td class="no-border text-center align-middle">
+                                    <img src="/img/editar.png" id="editar-@asignatura.Id" style="width:25px; height:25px; cursor:pointer;" class="me-1" />
+                                    <img src="/img/eliminar.png" id="eliminar-@asignatura.Id" style="width:25px; height:25px; cursor:pointer;" />
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
         </table>
-    @Html.ActionLink("Crear Asignatura", "FormAsignaturaCrear", "Asignaturas", new { @class = "center-link" })
-}
-else
-{
-        <h1>Vista Alumno</h1>
-        <table id="tablaAsignaturaProfesores">
-            <tr>
-                <th id="nombreAsignatura">Nombre</th>
-                <th id="cursoAsignatura">Curso</th>
-                <th>Matricularse</th>
-                <th>Horarios</th>
-            </tr>
+    </div>
 
-        </table>
-}
+    @if (Model.EsProfesor)
+    {
+        <div class="d-flex justify-content-center mt-3">
+            <button class="btn btn-primary" onclick="window.location.href='@Url.Action("FormAsignaturaCrear", "Asignaturas")'">
+                Crear Asignatura
+            </button>
+        </div>
+    }

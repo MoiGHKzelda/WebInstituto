@@ -15,7 +15,13 @@ namespace WebInstituto.Models
         public int IdAlumno { get; set; }
         [ForeignKey("IdAlumno")]
         public Persona Alumno { get; set; }
-        
-    }
 
+        public AsignaturaPersona() { }
+
+        public AsignaturaPersona(int alumno, int asignatura)
+        {
+            this.IdAlumno = alumno;
+            this.IdAsignatura = asignatura;
+        }
+    }
 }

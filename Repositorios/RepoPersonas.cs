@@ -18,20 +18,28 @@ namespace WebInstituto.Repositorios
         }
         public Persona CrearPersona(Persona persona)
         {
-            persona.ContrasenyaHash=SeguridadService.HashPassword(persona.ContrasenyaHash);
-            Persona personaNew = Db.Persona.Add(persona).Entity;
+            if (!Db.Persona.Any(a => a.Mail == persona.Mail))
+            {
+                persona.ContrasenyaHash = SeguridadService.HashPassword(persona.ContrasenyaHash);
+                Persona personaNew = Db.Persona.Add(persona).Entity;
 
-            Db.SaveChanges();
+                Db.SaveChanges();
 
-            return persona;
+                return persona;
+            }
+            else
+            {
+                Console.WriteLine("Usuario ya registrado");
+                return null;
+            }
+            
         }
         public Persona GetByEmail(string mail )
-        {
-            var hola = Db.Persona;
-            
+        {        
             IList<Persona> lista = this.Db.Persona.ToList();
             Persona personaMail = lista.Where(p => p.Mail == mail).FirstOrDefault();
             return personaMail;
         }
+
     }
 }

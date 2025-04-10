@@ -15,6 +15,7 @@ namespace WebInstituto
         public DbSet<Persona> Persona { get; set; }
         public DbSet<Asignatura> Asignatura { get; set; }
         public DbSet<Horario> Horario { get; set; }
+        public DbSet<AsignaturaPersona> AsignaturaPersona { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
          => options.UseSqlite($"Data Source={_pathDB}");

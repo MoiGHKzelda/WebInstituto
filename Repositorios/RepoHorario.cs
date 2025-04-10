@@ -18,7 +18,7 @@ namespace WebInstituto.Repositorios
         {
             if (!ComprobarFechaValida(horario))
             {
-                Console.WriteLine("No se crea");
+                Console.WriteLine("No se crea, está repetido o no son válidos los datos");
                 return null;
             }
             Db.Horario.Add(horario);

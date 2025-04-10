@@ -16,7 +16,7 @@ namespace WebInstituto.Models
         public int Course { get; set; }
 
         // Relación con Persona (Alumnos)
-        public IList<AsignaturaPersona> Alumnos { get; set; }
+        public virtual IList<AsignaturaPersona> Alumnos { get; set; }
 
         // Relación con Profesor
         [ForeignKey("IdProfesor")]
@@ -25,7 +25,7 @@ namespace WebInstituto.Models
         public int? IdProfesor { get; set; }
 
         // Relación con horarios
-        public IList<Horario> Horarios { get; set; }
+        public virtual IList<Horario> Horarios { get; set; }
 
         public Asignatura()
         {

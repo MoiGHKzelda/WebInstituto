@@ -10,9 +10,10 @@
     <None Include="wwwroot\css\site.css" />
     <None Include="wwwroot\css\vistas.css" />
     <None Include="wwwroot\favicon.ico" />
+    <None Include="wwwroot\img\editar.png" />
+    <None Include="wwwroot\img\eliminar.png" />
     <None Include="wwwroot\js\site.js" />
     <None Include="wwwroot\js\viewAsignatura.js" />
-    <None Include="wwwroot\js\viewHorario.js" />
     <None Include="wwwroot\js\viewProfesores.js" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
@@ -91,6 +92,10 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
 </Project>

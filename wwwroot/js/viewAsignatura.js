@@ -1,60 +1,72 @@
-﻿let nombreAsignatura = document.getElementById("nombreAsignatura");
-let cursoAsignatura = document.getElementById("cursoAsignatura");
-let tablaAsignatura = document.querySelectorAll("#tablaAsignatura tr");
+﻿const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
 
-let ordenNombre = true;
-let ordenCurso = true;
+document.addEventListener("DOMContentLoaded", () => {
+    const btnImpartir = document.getElementById("btnImpartir");
+    const btnDejarDeImpartir = document.getElementById("btnDejarDeImpartir");
+    const btnMatricular = document.getElementById("btnMatricular");
 
-nombreAsignatura.addEventListener("click", () => {
-    let datos = [];
-
-    // Obtener las filas y extraer el texto dentro de <a>
-    for (let i = 1; i < tablaAsignatura.length; i++) {
-        let celdas = tablaAsignatura[i].getElementsByTagName("td");
-
-        let enlaceElemento = celdas[0].querySelector("a"); //Primera celda extraemos el <a> y su contenido
-        let textoEnlace = enlaceElemento ? enlaceElemento.textContent.trim() : "";
-        let curso = celdas[1].textContent.trim();
-
-        datos.push([textoEnlace, tablaAsignatura[i]]);
+    if (btnImpartir) {
+        btnImpartir.addEventListener("click", () => cambiarEstadoImpartir(btnImpartir));
     }
 
-    // Si orden es true es ascendente, si es false descendente
-    if (ordenNombre) {
-        datos.sort((a, b) => a[0].localeCompare(b[0]));
-    } else {
-        datos.sort((a, b) => b[0].localeCompare(a[0]));
+    if (btnDejarDeImpartir) {
+        btnDejarDeImpartir.addEventListener("click", () => cambiarEstadoImpartir(btnDejarDeImpartir));
     }
-    ordenNombre = !ordenNombre;
 
-    // Reinsertar las filas ordenadas en la tabla
-    let tbody = document.getElementById("tablaAsignatura");
-    datos.forEach(d => tbody.appendChild(d[1]));
+    if (btnMatricular) {
+        btnMatricular.addEventListener("click", () => cambiarEstadoMatricular(btnMatricular));
+    }
 });
 
 
-cursoAsignatura.addEventListener("click", () => {
-    let datos = [];
+function cambiarEstadoImpartir(boton) {
+    const activar = boton.classList.contains("btn-outline-success");
+    const asignaturaId = boton.dataset.asignaturaId;
 
-    // Obtener las filas y almacenar la información td
-    for (let i = 1; i < tablaAsignatura.length; i++) {
-        let celdas = tablaAsignatura[i].getElementsByTagName("td");
+    fetch('/Asignaturas/CambiarEstadoImpartir', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': token
+        },
+        body: JSON.stringify({
+            asignaturaId: parseInt(asignaturaId),
+            activar: activar,
+            usuarioEmail: userEmail
+        })
+    }).then(res => res.json()).then(() => {
+        boton.classList.toggle("btn-outline-success");
+        boton.classList.toggle("btn-outline-danger");
+        boton.textContent = activar
+            ? "Dejar de impartir"
+            : "Impartir";
+    }).catch(err => {
+        console.error("Error:", err);
+    });
+}
 
-        let enlace = celdas[0].innerHTML.trim();
-        let curso = celdas[1].textContent.trim();
-        datos.push([enlace, curso, tablaAsignatura[i]]);
-    }
+function cambiarEstadoMatricular(boton) {
+    const activar = boton.classList.contains("btn-outline-success");
+    const asignaturaId = boton.dataset.asignaturaId;
 
-    // Si orden es true es ascendente, si es false descendente
-    if (ordenCurso) {
-        datos.sort((a, b) => a[1].localeCompare(b[1]));
-    } else {
-        datos.sort((a, b) => b[1].localeCompare(a[1]));
-    }
-    ordenCurso = !ordenCurso;
-
-    // Reinsertar las filas ordenadas en la tabla
-    let tbody = document.getElementById("tablaAsignatura");
-    datos.forEach(d => tbody.appendChild(d[2]));
-})
-
+    fetch('/Asignaturas/CambiarEstadoMatricular', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': token
+        },
+        body: JSON.stringify({
+            asignaturaId: parseInt(asignaturaId),
+            activar: activar,
+            usuarioEmail: userEmail  // Pasamos el correo del usuario logueado
+        })
+    }).then(res => res.json()).then(() => {
+        boton.classList.toggle("btn-outline-success");
+        boton.classList.toggle("btn-outline-danger");
+        boton.textContent = activar
+            ? "Quitar matrícula"
+            : "Matricularse";
+    }).catch(err => {
+        console.error("Error:", err);
+    });
+}

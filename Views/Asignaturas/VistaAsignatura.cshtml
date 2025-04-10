@@ -1,0 +1,101 @@
+﻿@{
+    @model AsignaturaViewModel;
+    @using WebInstituto.ViewModels.Asignaturas;
+    var colspan = Model.EsProfesor ? 4 : 3;
+}
+<script type="module" src="~/js/viewAsignatura.js" asp-append-version="true"></script>
+<link rel="stylesheet" href="/css/vistaAsignaturas.css">
+@Html.AntiForgeryToken()
+<script>
+    const userEmail = "@Model.PersonaMail";
+</script>
+
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Información</h1>
+
+    <div class="d-flex justify-content-center">
+        <table class="table table-bordered w-auto text-center" id="tablaHorario">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 250px;">Día</th>
+                    <th style="width: 250px;">Inicio</th>
+                    <th style="width: 250px;">Fin</th>
+                    @if (Model.EsProfesor)
+                    {
+                        <th style="width: 250px;">Acciones</th>
+                    }
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Asignatura.Horarios == null || !Model.Asignatura.Horarios.Any())
+                {
+                    <tr>
+                        <td colspan="@colspan">No hay horarios disponibles</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (Horario horario in Model.Asignatura.Horarios)
+                    {
+                        <tr>
+                            @switch (horario.Day)
+                            {
+                                case 1: <td>Lunes</td>; break;
+                                case 2: <td>Martes</td>; break;
+                                case 3: <td>Miércoles</td>; break;
+                                case 4: <td>Jueves</td>; break;
+                                case 5: <td>Viernes</td>; break;
+                                default: <td>Fin de semana</td>; break;
+                            }
+                            <td>@horario.Start</td>
+                            <td>@horario.End</td>
+                            @if (Model.EsProfesor)
+                            {
+                                <td class="border-0  text-center align-middle">
+                                    <img src="/img/editar.png" id="editar-@horario.Id" style="width:25px; height:25px; cursor:pointer;" class="me-1" />
+                                    <img src="/img/eliminar.png" id="eliminar-@horario.Id" style="width:25px; height:25px; cursor:pointer;" />
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@if (Model.EsProfesor)
+{
+    <div class="d-flex justify-content-center gap-3">
+        <button class="btn btn-primary" onclick="window.location.href='@Url.Action("FormularioCrearHorario", "Horarios", new { asignaturaId = Model.Asignatura.Id })'">
+            Crear Horario
+        </button>
+
+        @if (Model.Asignatura.Profesor == null)
+        {
+            <button class="btn btn-outline-success" id="btnImpartir" data-asignatura-id="@Model.Asignatura.Id">
+                Impartir
+            </button>
+        }
+        else if (Model.PersonaMail == Model.Asignatura.Profesor.Mail)
+        {
+            <button class="btn btn-outline-danger" id="btnDejarDeImpartir" data-asignatura-id="@Model.Asignatura.Id">
+                Dejar de impartir
+            </button>
+        }
+
+        <button class="btn btn-success" onclick="window.location.href='@Url.Action("ListadoAlumno", "Personas", new { asignaturaId = Model.Asignatura.Id })'">
+            Ver Alumnos
+        </button>
+    </div>
+}
+
+else
+{
+    <div class="text-center">
+        <button class="btn btn-outline-success" id="btnMatricular" data-asignatura-id="@Model.Asignatura.Id">
+            Matricularse
+        </button>
+    </div>
+}

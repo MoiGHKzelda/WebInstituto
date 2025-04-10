@@ -1,32 +1,43 @@
-﻿@{
-    @model WebInstituto.ViewModels.Personas.LoginViewModel;
+﻿@model WebInstituto.ViewModels.Personas.LoginViewModel;
 
-}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
 
-<h2>Login</h2>
+            <h2 class="text-center mb-4">Login</h2>
 
-@using (Html.BeginForm("LoginSave", "Login", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+            @using (Html.BeginForm("LoginSave", "Login", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
 
-    <label for="email">Correo Electrónico</label>
-    @Html.TextBoxFor(m => m.Mail, new { @class = "form-control", required = "required" })
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo Electrónico</label>
+                    @Html.TextBoxFor(m => m.Mail, new { @class = "form-control", @placeholder = "ejemplo@correo.com", required = "required" })
+                </div>
 
-    <label for="password">Contraseña</label>
-    @Html.PasswordFor(m => m.ContrasenyaHash, new { @class = "form-control", required = "required" })
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    @Html.PasswordFor(m => m.ContrasenyaHash, new { @class = "form-control", required = "required" })
+                </div>
 
-    <button type="submit" class="btn btn-primary">Iniciar sesión</button>
-}
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+                </div>
+            }
 
-@Html.ActionLink("Registrarse", "Registro", "Login")
+            <div class="text-center mt-3">
+                @Html.ActionLink("¿No tienes cuenta? Registrarse", "Registro", "Login", null, new { @class = "btn btn-link" })
+            </div>
 
-@if (Model.TieneErrores)
-{
-    <div class="alert alert-danger" role="alert">
-        Datos incorrectos
+            @if (Model.TieneErrores)
+            {
+                <div class="alert alert-danger mt-3" role="alert">
+                    Datos incorrectos
+                </div>
+            }
+
+        </div>
     </div>
-}
-
-
-
+</div>

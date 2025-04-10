@@ -1,0 +1,45 @@
+﻿@{
+    @model ListadoAlumnoViewModel;
+    @using WebInstituto.ViewModels.Personas;
+}
+
+
+<h1>Listado Alumno de @Model.Asignatura.Name</h1>
+
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Información</h1>
+
+    <div class="d-flex justify-content-center">
+        <table class="table table-bordered w-auto text-center" id="tablaHorario">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 250px;">Nombre</th>
+                    <th style="width: 250px;">Apellidos</th>
+                    <th style="width: 250px;">Correo</th>
+                    <th style="width: 250px;">teléfono</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Asignatura.Alumnos == null || !Model.Asignatura.Alumnos.Any())
+                {
+                    <tr>
+                        <td colspan="4">No hay Alumnos</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (AsignaturaPersona persona in Model.Asignatura.Alumnos)
+                    {
+                        <tr>
+                            <td>@persona.Alumno.Name</td>
+                            <td>@persona.Alumno.LastName</td>
+                            <td>@persona.Alumno.Mail</td>
+                            <td>@persona.Alumno.EmergencyPhone</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
