@@ -2,12 +2,13 @@
     @model ListadoAlumnoViewModel;
     @using WebInstituto.ViewModels.Personas;
 }
-
-
-<h1>Listado Alumno de @Model.Asignatura.Name</h1>
-
 <div class="container mt-4">
-    <h1 class="text-center mb-4">Información</h1>
+    <div class="d-flex justify-content-end mt-2 me-4">
+        <button class="btn btn-warning" onclick="window.location.href='@Url.Action("Login", "Login")'">
+            Cerrar sesión
+        </button>
+    </div>
+    <h1>Listado Alumnos de @Model.Asignatura.Name</h1>
 
     <div class="d-flex justify-content-center">
         <table class="table table-bordered w-auto text-center" id="tablaHorario">

@@ -11,11 +11,17 @@
 </script>
 
 <div class="container mt-4">
+
+    <div class="d-flex justify-content-end mt-2 me-4">
+        <button class="btn btn-warning" onclick="window.location.href='@Url.Action("Login", "Login")'">
+            Cerrar sesión
+        </button>
+    </div>
     <h1 class="text-center mb-4">Información</h1>
 
     <div class="d-flex justify-content-center">
         <table class="table table-bordered w-auto text-center" id="tablaHorario">
-            <thead class="table-light">
+            <thead class="table-light">-
                 <tr>
                     <th style="width: 250px;">Día</th>
                     <th style="width: 250px;">Inicio</th>
@@ -53,8 +59,8 @@
                             @if (Model.EsProfesor)
                             {
                                 <td class="border-0  text-center align-middle">
-                                    <img src="/img/editar.png" id="editar-@horario.Id" style="width:25px; height:25px; cursor:pointer;" class="me-1" />
-                                    <img src="/img/eliminar.png" id="eliminar-@horario.Id" style="width:25px; height:25px; cursor:pointer;" />
+                                    <img src="/img/editar.png" id="editar-h-@horario.Id" style="width:25px; height:25px; cursor:pointer;" class="me-1" />
+                                    <img src="/img/eliminar.png" id="eliminar-h-@horario.Id" style="width:25px; height:25px; cursor:pointer;" />
                                 </td>
                             }
                         </tr>
