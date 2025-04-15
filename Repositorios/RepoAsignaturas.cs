@@ -58,6 +58,7 @@ namespace WebInstituto.Repositorios
         }
         public void ActualizarAsignatura(Asignatura asignatura)
         {
+            Console.WriteLine("Hola");
             // Marca la asignatura como modificada
             Db.Entry(asignatura).State = EntityState.Modified;
 

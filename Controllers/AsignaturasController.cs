@@ -38,7 +38,6 @@ namespace WebInstituto.Controllers
                 repoAsignaturas.CrearAsignatura(new Asignatura(
                     asignaturaCreada.Name, cursoSeleccionado
                 ));
-
                 return RedirectToAction("VistaAsignaturas");
             }
             catch (Exception ex)
