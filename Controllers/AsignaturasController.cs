@@ -25,44 +25,67 @@ namespace WebInstituto.Controllers
             this.repoMatricula = new RepoMatricular(db);
             sessionService = sesion;
         }
-        
+
         [HttpPost]
-        public ActionResult CrearAsignatura(CrearAsignaturasViewModel asignaturaCreada, string Curso)
+        [ValidateAntiForgeryToken]
+        public ActionResult CrearEditarAsignatura(CrearEditarAsignaturasViewModel model)
         {
             try
             {
-                // El valor del curso seleccionado viene directamente como un parámetro 'Curso'
-                int cursoSeleccionado = int.Parse(Curso);
+                // Si el Id es 0, significa que estamos creando una nueva asignatura
+                if (model.Asignatura.Id == 0)
+                {
+                    // Crear una nueva asignatura
+                    var asignatura = new Asignatura(model.Asignatura.Name, model.Asignatura.Course);
+                    repoAsignaturas.CrearAsignatura(asignatura);
+                }
+                else
+                {
+                    // Si el Id no es 0, significa que estamos actualizando una asignatura existente
+                    repoAsignaturas.ActualizarAsignatura(model.Asignatura);
+                }
 
-                // Crear la asignatura con el valor del curso
-                repoAsignaturas.CrearAsignatura(new Asignatura(
-                    asignaturaCreada.Name, cursoSeleccionado
-                ));
-
-                return RedirectToAction("VistaAsignaturas");
+                return RedirectToAction("VistaAsignaturas"); // Redirigir a la vista de asignaturas
             }
             catch (Exception ex)
             {
-                // Manejo de error genérico
-                ModelState.AddModelError(string.Empty, "Hubo un error al crear la asignatura.");
-                return View("~/Views/Asignaturas/CrearAsignatura.cshtml", asignaturaCreada);
+                ModelState.AddModelError(string.Empty, "Hubo un error al guardar la asignatura.");
+                return View(model); // Devolver el mismo modelo con los errores
             }
         }
 
-        public ActionResult FormAsignaturaCrear()
+
+
+
+        public ActionResult FormAsignatura(int idAsignatura)
         {
-            CrearAsignaturasViewModel viewModel = new CrearAsignaturasViewModel()
+            Console.WriteLine("Entra al controlador");
+            Asignatura asigEditar;
+            bool editar;
+            if (idAsignatura == 0)
             {
+                asigEditar = null;
+                editar = false;
+            }
+            else
+            {
+                asigEditar = repoAsignaturas.GetById(idAsignatura);
+                editar = true;
+            }
+            FormAsignaturaViewModel viewModel = new FormAsignaturaViewModel()
+            {
+                Asignatura = asigEditar,
                 Cursos = new List<SelectListItem>
                 {
                     new SelectListItem{Value=((int)Cursos.Primero).ToString(), Text="1º"},
                     new SelectListItem{Value=((int)Cursos.Segundo).ToString(), Text="2º"},
                     new SelectListItem{Value=((int)Cursos.Tercero).ToString(), Text="3º"},
                     new SelectListItem{Value=((int)Cursos.Cuarto).ToString(), Text="4º"}
-                }
+                },
+                Editar=editar
             };
 
-            return View("~/Views/Asignaturas/CrearAsignatura.cshtml", viewModel);
+            return View("~/Views/Asignaturas/CrearEditarAsignatura.cshtml", viewModel);
         }
 
         public ActionResult VistaAsignaturas()
@@ -94,7 +117,6 @@ namespace WebInstituto.Controllers
             return View("~/Views/Asignaturas/VistaAsignatura.cshtml", viewModel);
         }
 
-        //Testeo
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CambiarEstadoImpartir([FromBody] AccionesAsignaturaDatos datos)

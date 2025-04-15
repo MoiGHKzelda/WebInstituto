@@ -58,11 +58,19 @@ namespace WebInstituto.Repositorios
         }
         public void ActualizarAsignatura(Asignatura asignatura)
         {
-            // Marca la asignatura como modificada
-            Db.Entry(asignatura).State = EntityState.Modified;
+            var asignaturaExistente = Db.Asignatura.FirstOrDefault(a => a.Id == asignatura.Id);
 
-            // Guarda los cambios en la base de datos
-            Db.SaveChanges();
+            if (asignaturaExistente != null)
+            {
+                asignaturaExistente.Name = asignatura.Name;
+                asignaturaExistente.Course = asignatura.Course;
+
+                Db.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("La asignatura no existe en la base de datos.");
+            }
         }
 
     }

@@ -70,3 +70,4 @@ function cambiarEstadoMatricular(boton) {
         console.error("Error:", err);
     });
 }
+

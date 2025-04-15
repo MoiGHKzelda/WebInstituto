@@ -23,8 +23,8 @@ namespace WebInstituto.Controllers
         }
 
         public ActionResult Login()
-        {            
-            //HttpContext.Session.Clear();
+        {
+            sessionService.Logout();
             LoginViewModel viewModel = new LoginViewModel();
             return View("~/Views/Personas/Login.cshtml", viewModel);
         }
