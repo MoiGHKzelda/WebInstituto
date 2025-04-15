@@ -58,6 +58,7 @@ namespace WebInstituto.Repositorios
         }
         public void ActualizarAsignatura(Asignatura asignatura)
         {
+            Console.WriteLine("Adiós");
             var asignaturaExistente = Db.Asignatura.FirstOrDefault(a => a.Id == asignatura.Id);
 
             if (asignaturaExistente != null)
