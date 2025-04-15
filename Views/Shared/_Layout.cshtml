@@ -12,10 +12,35 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-    <!-- Header simple -->
-    <header class="bg-primary text-white text-center py-3 shadow-sm">
-        <h1 class="h2 m-0">Web Instituto Moisés</h1>
+    <header class="bg-primary text-white py-3 shadow-sm">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    @if (ViewBag.EstaLogeado != null && (bool)ViewBag.EstaLogeado)
+                    {
+                        <button class="btn btn-secondary" onclick="window.history.back();">
+                            Volver
+                        </button>
+                    }
+                </div>
+                <div class="col text-center">
+                    <h1 class="h2 m-0">Web Instituto Moisés</h1>
+                </div>
+                <div class="col-auto">
+                    @if (ViewBag.EstaLogeado != null && (bool)ViewBag.EstaLogeado)
+                    {
+                        <button class="btn btn-warning" onclick="window.location.href='@Url.Action("Login", "Login")'">
+                            Cerrar sesión
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
     </header>
+
+
+
+
 
     <!-- Contenido principal -->
     <main role="main" class="flex-fill container py-4">

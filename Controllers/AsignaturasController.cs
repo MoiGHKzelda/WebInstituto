@@ -16,7 +16,7 @@ namespace WebInstituto.Controllers
         public readonly RepoAsignaturas repoAsignaturas; // Iniciar el repositorio de asignaturas
         private readonly SessionService sessionService;
         public readonly RepoPersonas repoPersonas;
-            public readonly RepoMatricular repoMatricula;
+        public readonly RepoMatricular repoMatricula;
         public AsignaturasController(SessionService sesion)
         {
             DBSqlite db = new DBSqlite();
@@ -27,9 +27,13 @@ namespace WebInstituto.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult CrearEditarAsignatura(CrearEditarAsignaturasViewModel model)
         {
+            if (!sessionService.EstaLogeado())
+            {
+                return (ActionResult)sessionService.NoLogin();
+            }
+            ViewBag.EstaLogeado = sessionService.EstaLogeado();
             try
             {
                 // Si el Id es 0, significa que estamos creando una nueva asignatura
@@ -53,12 +57,27 @@ namespace WebInstituto.Controllers
                 return View(model); // Devolver el mismo modelo con los errores
             }
         }
+        [HttpPost]
+        public IActionResult EliminarAsignatura(int id)
+        {
+            bool eliminado = repoAsignaturas.EliminarAsignatura(id);
 
-
-
-
+            if (eliminado)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound("No se encontró la asignatura.");
+            }
+        }
         public ActionResult FormAsignatura(int idAsignatura)
         {
+            if (!sessionService.EstaLogeado())
+            {
+                return (ActionResult)sessionService.NoLogin();
+            }
+            ViewBag.EstaLogeado = sessionService.EstaLogeado();
             Console.WriteLine("Entra al controlador");
             Asignatura asigEditar;
             bool editar;
@@ -90,6 +109,11 @@ namespace WebInstituto.Controllers
 
         public ActionResult VistaAsignaturas()
         {
+            if (!sessionService.EstaLogeado())
+            {
+                return (ActionResult)sessionService.NoLogin();
+            }
+            ViewBag.EstaLogeado = sessionService.EstaLogeado();
             AsignaturasViewModel viewModel = new AsignaturasViewModel()
             {
                 Asignaturas = repoAsignaturas.GetAll(),
@@ -100,22 +124,40 @@ namespace WebInstituto.Controllers
         }
         public ActionResult VistaAsignatura(int id)
         {
+            if (!sessionService.EstaLogeado())
+            {
+                return (ActionResult)sessionService.NoLogin();
+            }
+            ViewBag.EstaLogeado = sessionService.EstaLogeado();
             // Obtener la asignatura correspondiente
             Asignatura asignatura = repoAsignaturas.GetById(id);
 
+            // Obtener el correo de la persona logueada
+            string personaMail = sessionService.GetMailPersona();
+            Persona persona = repoPersonas.GetByEmail(personaMail);
 
-            // viemModel final que se enviará a la vista
+            // Verificar si ya está matriculado
+            bool yaMatriculado = false;
+            if (persona != null)
+            {
+                var personaMatriculada = new AsignaturaPersona(persona.Id.Value, asignatura.Id);
+                yaMatriculado = repoMatricula.ExisteMatriculacion(personaMatriculada);
+            }
+
+            // ViemModel final que se enviará a la vista
             AsignaturaViewModel viewModel = new AsignaturaViewModel()
             {
                 Asignatura = asignatura,
                 EsProfesor = sessionService.EsProfesor(),
-                PersonaMail = sessionService.GetMailPersona()
+                PersonaMail = personaMail,
+                EstaMatriculado = yaMatriculado  // Enviar el estado de matriculación
             };
 
             ViewData["Title"] = "Vista Horarios";
 
             return View("~/Views/Asignaturas/VistaAsignatura.cshtml", viewModel);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -174,57 +216,31 @@ namespace WebInstituto.Controllers
         {
             try
             {
-                // Obtener la asignatura a través del ID
-                Asignatura asignatura = repoAsignaturas.GetById(datos.AsignaturaId);
-                if (asignatura == null)
-                {
-                    return NotFound(new { message = "Asignatura no encontrada." });
-                }
+                var asignatura = repoAsignaturas.GetById(datos.AsignaturaId);
+                if (asignatura == null) return NotFound(new { message = "Asignatura no encontrada." });
 
-                // Obtener el correo de la persona logueada desde el servicio de sesión
                 string personaMail = sessionService.GetMailPersona();
+                var persona = repoPersonas.GetByEmail(personaMail);
+                if (persona == null) return BadRequest(new { message = "Persona no encontrada." });
 
-                // Buscar la persona (el estudiante) por su correo en el repositorio de personas
-                Persona persona = repoPersonas.GetByEmail(personaMail);  // Asegúrate de tener un método en tu repositorio que busque por mail.
-                if (persona == null)
-                {
-                    return BadRequest(new { message = "No se encontró la persona con el correo especificado." });
-                }
+                var personaMatriculada = new AsignaturaPersona(persona.Id.Value, asignatura.Id);
 
-                // Crear el objeto de AsignaturaPersona con los datos proporcionados
-                AsignaturaPersona personaMatriculada = new AsignaturaPersona(persona.Id.Value, asignatura.Id);
-
-                // Si activar es true, matriculamos al estudiante
                 if (datos.Activar)
                 {
-                    // Comprobamos si la persona ya está matriculada
-                    bool yaMatriculado = repoMatricula.ExisteMatriculacion(personaMatriculada);
-                    if (yaMatriculado)
-                    {
-                        return BadRequest(new { message = "El estudiante ya está matriculado en esta asignatura." });
-                    }
-
-                    // Crear la matrícula
-                    repoMatricula.crearMatriculacion(personaMatriculada);
+                    if (!repoMatricula.ExisteMatriculacion(personaMatriculada))
+                        repoMatricula.crearMatriculacion(personaMatriculada);
                 }
                 else
                 {
-                    // Si activar es false, desmatriculamos al estudiante
-                    bool matriculacionExiste = repoMatricula.ExisteMatriculacion(personaMatriculada);
-                    if (!matriculacionExiste)
-                    {
-                        return BadRequest(new { message = "El estudiante no está matriculado en esta asignatura." });
-                    }
-
-                    // Eliminar la matrícula
-                    repoMatricula.eliminarMatriculacion(personaMatriculada);
+                    if (repoMatricula.ExisteMatriculacion(personaMatriculada))
+                        repoMatricula.eliminarMatriculacion(personaMatriculada);
                 }
 
                 return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Error al cambiar el estado de matriculación.", error = ex.Message });
+                return BadRequest(new { message = "Error al cambiar la matrícula.", error = ex.Message });
             }
         }
     }

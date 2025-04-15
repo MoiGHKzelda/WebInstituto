@@ -4,6 +4,7 @@
     var colspan = Model.EsProfesor ? 4 : 3;
 }
 <script type="module" src="~/js/viewAsignatura.js" asp-append-version="true"></script>
+<script type="module" src="~/js/viewHorarios.js" asp-append-version="true"></script>
 <link rel="stylesheet" href="/css/vistaAsignaturas.css">
 @Html.AntiForgeryToken()
 <script>
@@ -11,17 +12,11 @@
 </script>
 
 <div class="container mt-4">
-
-    <div class="d-flex justify-content-end mt-2 me-4">
-        <button class="btn btn-warning" onclick="window.location.href='@Url.Action("Login", "Login")'">
-            Cerrar sesión
-        </button>
-    </div>
     <h1 class="text-center mb-4">Información</h1>
 
     <div class="d-flex justify-content-center">
         <table class="table table-bordered w-auto text-center" id="tablaHorario">
-            <thead class="table-light">-
+            <thead class="table-light">
                 <tr>
                     <th style="width: 250px;">Día</th>
                     <th style="width: 250px;">Inicio</th>
@@ -59,7 +54,11 @@
                             @if (Model.EsProfesor)
                             {
                                 <td class="border-0  text-center align-middle">
-                                    <img src="/img/editar.png" id="editar-h-@horario.Id" style="width:25px; height:25px; cursor:pointer;" class="me-1" />
+                                    <a href="@Url.Action("FormularioCrearHorario", "Horarios", new { asignaturaId = Model.Asignatura.Id, horarioId = horario.Id })">
+                                        <img src="/img/editar.png" style="width:25px; height:25px; cursor:pointer;" class="me-1" />
+                                    </a>
+
+
                                     <img src="/img/eliminar.png" id="eliminar-h-@horario.Id" style="width:25px; height:25px; cursor:pointer;" />
                                 </td>
                             }
@@ -96,12 +95,13 @@
         </button>
     </div>
 }
-
 else
 {
     <div class="text-center">
-        <button class="btn btn-outline-success" id="btnMatricular" data-asignatura-id="@Model.Asignatura.Id">
-            Matricularse
+        <!-- Botón de matrícula -->
+        <button class="btn @(Model.EstaMatriculado ? "btn-outline-danger" : "btn-outline-success")"
+                id="btnMatricular" data-asignatura-id="@Model.Asignatura.Id">
+            @(Model.EstaMatriculado ? "Quitar matrícula" : "Matricularse")
         </button>
     </div>
 }

@@ -58,16 +58,20 @@ function cambiarEstadoMatricular(boton) {
         body: JSON.stringify({
             asignaturaId: parseInt(asignaturaId),
             activar: activar,
-            usuarioEmail: userEmail  // Pasamos el correo del usuario logueado
+            usuarioEmail: userEmail
         })
-    }).then(res => res.json()).then(() => {
-        boton.classList.toggle("btn-outline-success");
-        boton.classList.toggle("btn-outline-danger");
-        boton.textContent = activar
-            ? "Quitar matrícula"
-            : "Matricularse";
+    }).then(res => res.json()).then((data) => {
+        if (data.success) {
+            boton.classList.toggle("btn-outline-success");
+            boton.classList.toggle("btn-outline-danger");
+            boton.textContent = activar
+                ? "Quitar matrícula"
+                : "Matricularse";
+        } else {
+            alert(data.message || "No se pudo actualizar la matrícula.");
+        }
     }).catch(err => {
         console.error("Error:", err);
+        alert("Ocurrió un error al procesar tu solicitud.");
     });
 }
-
