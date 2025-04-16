@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using WebInstituto.Models;
 using WebInstituto.Models.Enum;
 using WebInstituto.Repositorios;
+using WebInstituto.Services;
 using WebInstituto.ViewModels.Horarios;
 
 
@@ -13,20 +14,23 @@ namespace WebInstituto.Controllers
     {
         private readonly RepoHorario repoHorarios;
         private readonly RepoAsignaturas repoAsignaturas;
+        private readonly SessionService sessionService;
 
-        public HorariosController()
+        public HorariosController(SessionService sessionService)
         {
             DBSqlite db = new DBSqlite();
             this.repoHorarios = new RepoHorario(db);
-            this.repoAsignaturas = new RepoAsignaturas(db); // Iniciar el repositorio de asignaturas
+            this.repoAsignaturas = new RepoAsignaturas(db);
+            this.sessionService = sessionService;
         }
 
         public ActionResult Horario(int id)
         {
-            if (id <= 0)
+            if (!sessionService.EstaLogeado())
             {
-                return BadRequest("ID inválido.");
+                return (ActionResult)sessionService.NoLogin();
             }
+            ViewBag.EstaLogeado = sessionService.EstaLogeado();
 
             // Obtener los horarios que coincidan con el id de la asignatura
             IList<Horario> horarios = repoHorarios.GetAll().Where(h => h.AsignaturaId == id).ToList();
@@ -54,53 +58,105 @@ namespace WebInstituto.Controllers
             ViewData["Title"] = "Vista Horarios";
             return View(viewModel);
         }
-        public ActionResult FormularioCrearHorario(int asignaturaId)
+        public ActionResult FormularioCrearHorario(int asignaturaId, int horarioId = 0)
         {
-            IList<Asignatura> asignaturas = repoAsignaturas.GetAll();
-            Asignatura asignaturaEncontrada = asignaturas.FirstOrDefault(a=>a.Id==asignaturaId);
+            if (!sessionService.EstaLogeado())
+            {
+                return (ActionResult)sessionService.NoLogin();
+            }
+            ViewBag.EstaLogeado = sessionService.EstaLogeado();
 
+            // Obtén la asignatura mediante el id
+            Asignatura asignatura = repoAsignaturas.GetById(asignaturaId);
+            if (asignatura == null)
+            {
+                return BadRequest("Asignatura no encontrada.");
+            }
+
+            // Crea el view model y carga los dropdowns
             FormularioHorarioViewModel viewModel = new FormularioHorarioViewModel()
             {
                 HorarioLectivo = new List<SelectListItem>
                 {
-                    new SelectListItem{Value="08:00", Text="08:00"},
-                    new SelectListItem{Value="08:30", Text="08:30"},
-                    new SelectListItem{Value="09:00", Text="09:00"},
-                    new SelectListItem{Value="09:30", Text="09:30"},
-                    new SelectListItem{Value="10:00", Text="10:00"},
-                    new SelectListItem{Value="10:30", Text="10:30"},
-                    new SelectListItem{Value="11:00", Text="11:00"},
-                    new SelectListItem{Value="11:30", Text="11:30"},
-                    new SelectListItem{Value="12:00", Text="12:00"},
-                    new SelectListItem{Value="12:30", Text="12:30"},
-                    new SelectListItem{Value="13:00", Text="13:00"},
-                    new SelectListItem{Value="13:30", Text="13:30"},
-                    new SelectListItem{Value="14:00", Text="14:00"},
-                    new SelectListItem{Value="14:30", Text="14:30"},
-                    new SelectListItem{Value="15:00", Text="15:00"}
+                    new SelectListItem { Value = "08:00", Text = "08:00" },
+                    new SelectListItem { Value = "08:30", Text = "08:30" },
+                    new SelectListItem { Value = "09:00", Text = "09:00" },
+                    new SelectListItem { Value = "09:30", Text = "09:30" },
+                    new SelectListItem { Value = "10:00", Text = "10:00" },
+                    new SelectListItem { Value = "10:30", Text = "10:30" },
+                    new SelectListItem { Value = "11:00", Text = "11:00" },
+                    new SelectListItem { Value = "11:30", Text = "11:30" },
+                    new SelectListItem { Value = "12:00", Text = "12:00" },
+                    new SelectListItem { Value = "12:30", Text = "12:30" },
+                    new SelectListItem { Value = "13:00", Text = "13:00" },
+                    new SelectListItem { Value = "13:30", Text = "13:30" },
+                    new SelectListItem { Value = "14:00", Text = "14:00" },
+                    new SelectListItem { Value = "14:30", Text = "14:30" },
+                    new SelectListItem { Value = "15:00", Text = "15:00" }
                 },
-                Asignatura = asignaturaEncontrada,
-                
-                 DiasSemanales = Enum.GetValues(typeof(DiasSemana)).Cast<DiasSemana>().Select(d => new SelectListItem
-                {
-                    Text = d.ToString(),
-                    Value = ((int)d).ToString()
-                }).ToList()
-        };
-            return View(viewModel);
-        }
-        public ActionResult CrearHorario(HorarioViewModel horarioViewModel)
-        {
-            Horario horario = new Horario
-            {
-                Day = horarioViewModel.Day,
-                Start = horarioViewModel.Start,
-                End = horarioViewModel.End,
-                AsignaturaId = horarioViewModel.AsignaturaId
+                DiasSemanales = Enum.GetValues(typeof(DiasSemana))
+                                     .Cast<DiasSemana>()
+                                     .Select(d => new SelectListItem
+                                     {
+                                         Text = d.ToString(),
+                                         Value = ((int)d).ToString()
+                                     }).ToList(),
+                Asignatura = asignatura,
+                // Atributo para distinguir creación o edición
+                Id = horarioId
             };
 
-            repoHorarios.CrearHorario(horario);
+            // Si se recibe un horarioId, buscamos el horario existente y llenamos el view model
+            if (horarioId != 0)
+            {
+                Horario horarioExistente = repoHorarios.GetById(horarioId);
+                if (horarioExistente == null)
+                {
+                    return NotFound("Horario no encontrado.");
+                }
+                viewModel.Start = horarioExistente.Start;
+                viewModel.End = horarioExistente.End;
+                viewModel.Day = horarioExistente.Day;
+            }
+
+            return View(viewModel);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CrearHorario(HorarioViewModel horarioViewModel)
+        {
+            if (!sessionService.EstaLogeado())
+            {
+                return (ActionResult)sessionService.NoLogin();
+            }
+            //Modo edición
+            if (horarioViewModel.Id != 0)
+            {
+                Horario horarioExistente = repoHorarios.GetById(horarioViewModel.Id);
+                if (horarioExistente == null)
+                {
+                    return NotFound("Horario no encontrado.");
+                }
+                horarioExistente.Start = horarioViewModel.Start;
+                horarioExistente.End = horarioViewModel.End;
+                horarioExistente.Day = horarioViewModel.Day;
+                repoHorarios.ActualizarHorario(horarioExistente);
+            }
+            else // Modo creación
+            {
+                Horario nuevoHorario = new Horario
+                {
+                    Start = horarioViewModel.Start,
+                    End = horarioViewModel.End,
+                    Day = horarioViewModel.Day,
+                    AsignaturaId = horarioViewModel.AsignaturaId
+                };
+                repoHorarios.CrearHorario(nuevoHorario);
+            }
             return RedirectToAction("VistaAsignatura", "Asignaturas", new { id = horarioViewModel.AsignaturaId });
         }
+
     }
 }

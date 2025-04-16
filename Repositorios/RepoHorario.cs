@@ -50,5 +50,38 @@ namespace WebInstituto.Repositorios
 
             return true;
         }
-    }   
+
+        //Actualizar horario
+        public void ActualizarHorario(Horario horario)
+        {
+            var horarioExistente = Db.Horario.FirstOrDefault(h => h.Id == horario.Id);
+            if (horarioExistente != null)
+            {
+                horarioExistente.Start = horario.Start;
+                horarioExistente.End = horario.End;
+                horarioExistente.Day = horario.Day;
+                Db.SaveChanges();
+            }
+        }
+
+        //Eliminar Horario
+        public bool EliminarHorario(int id)
+        {
+            Horario horario = Db.Horario.FirstOrDefault(h => h.Id == id);
+            if (horario == null)
+            {
+                return false;
+            }
+            Db.Horario.Remove(horario);
+            Db.SaveChanges();
+            return true;
+        }
+
+        //Buscar horario por id
+        public Horario GetById(int id)
+        {
+            return Db.Horario.FirstOrDefault(h => h.Id == id);
+        }
+
+    }
 }

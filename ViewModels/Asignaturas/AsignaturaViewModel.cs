@@ -9,5 +9,7 @@ namespace WebInstituto.ViewModels.Asignaturas
         public Asignatura Asignatura { get; set; }
         public bool EsProfesor { get; set; }
         public string PersonaMail { get; set; }
+        public bool EstaMatriculado { get; set; }
+
     }
 }

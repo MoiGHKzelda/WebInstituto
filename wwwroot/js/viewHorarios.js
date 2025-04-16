@@ -1,20 +1,23 @@
 ﻿document.addEventListener("DOMContentLoaded", () => {
 
-    // --- Editar Asignatura ---
-    document.querySelectorAll('img[id^="editar-"]').forEach(function (btn) {
+    // --- Editar Horario ---
+    document.querySelectorAll('img[id^="editar-h-"]').forEach(function (btn) {
         btn.addEventListener('click', function () {
-            let id = this.id.split('-')[1];
-            window.location.href = `/Asignaturas/FormAsignatura?idAsignatura=${id}`;
+            let parts = this.id.split('-'); 
+            let horarioId = parts[2];
+            let asignaturaId = this.dataset.asignaturaId;
+            window.location.href = `/Horarios/FormularioCrearHorario?asignaturaId=${asignaturaId}&horarioId=${horarioId}`;
         });
     });
 
-    // --- Eliminar Asignatura ---
-    document.querySelectorAll('img[id^="eliminar-"]').forEach(function (btn) {
+    // --- Eliminar Horario ---
+    document.querySelectorAll('img[id^="eliminar-h-"]').forEach(function (btn) {
         btn.addEventListener('click', function () {
-            let id = this.id.split('-')[1];
+            let parts = this.id.split('-');
+            let horarioId = parts[2];
 
-            if (confirm("¿Estás seguro de que deseas eliminar esta asignatura?")) {
-                fetch(`/Asignaturas/EliminarAsignatura?id=${id}`, {
+            if (confirm("¿Estás seguro de que deseas eliminar este horario?")) {
+                fetch(`/Horarios/EliminarHorario?id=${horarioId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -24,7 +27,7 @@
                         if (response.ok) {
                             window.location.reload();
                         } else {
-                            alert('Error al eliminar la asignatura.');
+                            alert('Error al eliminar el horario.');
                         }
                     })
                     .catch(err => {

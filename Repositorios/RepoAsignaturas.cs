@@ -72,7 +72,17 @@ namespace WebInstituto.Repositorios
                 throw new Exception("La asignatura no existe en la base de datos.");
             }
         }
-
+        public bool EliminarAsignatura(int id)
+        {
+            var asignatura = Db.Asignatura.Find(id);
+            if (asignatura != null)
+            {
+                Db.Asignatura.Remove(asignatura);
+                Db.SaveChanges();
+                return true;  // Éxito
+            }
+            return false;  // No encontrada
+        }
     }
 }
 

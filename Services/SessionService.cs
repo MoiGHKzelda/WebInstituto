@@ -51,7 +51,7 @@ namespace WebInstituto.Services
         // Redirigir si no está logueado
         public IActionResult NoLogin()
         {
-            return new RedirectToActionResult("Login", "Login", null); // Redirigir a la página de login
+            return new RedirectToActionResult("Login", "Login", null);
         }
     }
 }
