@@ -67,14 +67,14 @@ namespace WebInstituto.Repositorios
         //Eliminar Horario
         public bool EliminarHorario(int id)
         {
-            Horario horario = Db.Horario.FirstOrDefault(h => h.Id == id);
-            if (horario == null)
+            var horario = Db.Horario.Find(id);
+            if (horario != null)
             {
-                return false;
+                Db.Horario.Remove(horario);
+                Db.SaveChanges();
+                return true;
             }
-            Db.Horario.Remove(horario);
-            Db.SaveChanges();
-            return true;
+            return false;
         }
 
         //Buscar horario por id

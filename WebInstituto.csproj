@@ -14,7 +14,6 @@
     <None Include="wwwroot\img\eliminar.png" />
     <None Include="wwwroot\js\site.js" />
     <None Include="wwwroot\js\viewAsignatura.js" />
-    <None Include="wwwroot\js\viewProfesores.js" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css" />

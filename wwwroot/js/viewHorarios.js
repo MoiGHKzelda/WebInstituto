@@ -12,20 +12,18 @@
 
     // --- Eliminar Horario ---
     document.querySelectorAll('img[id^="eliminar-h-"]').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            let parts = this.id.split('-');
-            let horarioId = parts[2];
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            let id = this.id.split('-')[2]; 
+            let asignaturaId = this.closest('a').href.split('asignaturaId=')[1].split('&')[0];
 
             if (confirm("¿Estás seguro de que deseas eliminar este horario?")) {
-                fetch(`/Horarios/EliminarHorario?id=${horarioId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+                fetch(this.closest('a').href, {
+                    method: 'GET'
                 })
                     .then(response => {
                         if (response.ok) {
-                            window.location.reload();
+                            window.location.href = `/Asignaturas/VistaAsignatura/${asignaturaId}`;
                         } else {
                             alert('Error al eliminar el horario.');
                         }
@@ -37,5 +35,7 @@
             }
         });
     });
+
+
 
 });

@@ -55,7 +55,7 @@ namespace WebInstituto.Controllers
                 PageTitle = $"Vista Horarios de {asignatura.Name} de {asignatura.Course}º" // Ahora se muestra el nombre de la asignatura
             };
 
-            ViewData["Title"] = "Vista Horarios";
+            ViewData["Title"] = "Vista Horarios"; 
             return View(viewModel);
         }
         public ActionResult FormularioCrearHorario(int asignaturaId, int horarioId = 0)
@@ -102,11 +102,9 @@ namespace WebInstituto.Controllers
                                          Value = ((int)d).ToString()
                                      }).ToList(),
                 Asignatura = asignatura,
-                // Atributo para distinguir creación o edición
                 Id = horarioId
             };
 
-            // Si se recibe un horarioId, buscamos el horario existente y llenamos el view model
             if (horarioId != 0)
             {
                 Horario horarioExistente = repoHorarios.GetById(horarioId);
@@ -156,6 +154,20 @@ namespace WebInstituto.Controllers
                 repoHorarios.CrearHorario(nuevoHorario);
             }
             return RedirectToAction("VistaAsignatura", "Asignaturas", new { id = horarioViewModel.AsignaturaId });
+        }
+        [HttpGet]
+        public IActionResult EliminarHorario(int asignaturaId, int horarioId)
+        {
+            bool eliminado = repoHorarios.EliminarHorario(horarioId);
+
+            if (eliminado)
+            {
+                return Ok(new { success = true, asignaturaId = asignaturaId });
+            }
+            else
+            {
+                return NotFound(new { success = false, message = "No se encontró el horario o no se pudo eliminar." });
+            }
         }
 
     }

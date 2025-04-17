@@ -58,8 +58,9 @@
                                         <img src="/img/editar.png" style="width:25px; height:25px; cursor:pointer;" class="me-1" />
                                     </a>
 
-
-                                    <img src="/img/eliminar.png" id="eliminar-h-@horario.Id" style="width:25px; height:25px; cursor:pointer;" />
+                                    <a href="@Url.Action("EliminarHorario", "Horarios", new { asignaturaId = Model.Asignatura.Id,horarioId = horario.Id })">
+                                        <img src="/img/eliminar.png" id="eliminar-h-@horario.Id" style="width:25px; height:25px; cursor:pointer;" />
+                                    </a>                                    
                                 </td>
                             }
                         </tr>
