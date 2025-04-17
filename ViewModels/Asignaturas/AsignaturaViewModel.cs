@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Net.Mail;
-using WebInstituto.Models;
+﻿using WebInstituto.Models;
 
 namespace WebInstituto.ViewModels.Asignaturas
 {

@@ -3,35 +3,42 @@ using WebInstituto.Models;
 using WebInstituto.Repositorios;
 using WebInstituto.Services;
 using WebInstituto.ViewModels.Personas;
-using WebInstituto.ViewMoldels.Personas;
 
 namespace WebInstituto.Controllers
 {
     public class PersonasController : Controller
     {
+        private readonly RepoPersonas repoPersonas; // Repositorio para manejar personas.
+        private readonly RepoAsignaturas repoAsignaturas; // Repositorio para manejar asignaturas.
+        private readonly SessionService sessionService; // Servicio para controlar la sesión.
 
-        private readonly RepoPersonas repoPersonas; // Iniciar el repositorio de personas
-        private readonly RepoAsignaturas repoAsignaturas;
-        private readonly SessionService sessionService;
-        public PersonasController(SessionService sessionService) 
+        public PersonasController(SessionService sessionService)
         {
             DBSqlite db = new DBSqlite();
             this.repoPersonas = new RepoPersonas(db);
             this.repoAsignaturas = new RepoAsignaturas(db);
             this.sessionService = sessionService;
         }
+
+        // Muestra el listado de alumnos asociados a una asignatura específica.
         public IActionResult ListadoAlumno(int asignaturaId)
         {
             if (!sessionService.EstaLogeado())
             {
-                return (ActionResult)sessionService.NoLogin();
+                return (ActionResult)sessionService.NoLogin(); // Redirige si no hay sesión activa.
             }
+
             ViewBag.EstaLogeado = sessionService.EstaLogeado();
+
+            // Obtiene la asignatura por ID.
             Asignatura asignatura = repoAsignaturas.GetById(asignaturaId);
+
+            // Crea el ViewModel para pasar datos a la vista.
             ListadoAlumnoViewModel viewModel = new ListadoAlumnoViewModel()
             {
                 Asignatura = asignatura
             };
+
             return View("~/Views/Personas/ListadoAlumno.cshtml", viewModel);
         }
     }

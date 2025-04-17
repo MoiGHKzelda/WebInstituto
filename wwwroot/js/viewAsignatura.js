@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-
+//Cambiar estado de impartir 
 function cambiarEstadoImpartir(boton) {
     const activar = boton.classList.contains("btn-outline-success");
     const asignaturaId = boton.dataset.asignaturaId;
@@ -45,6 +45,7 @@ function cambiarEstadoImpartir(boton) {
     });
 }
 
+//Cambiar estado de matriculación 
 function cambiarEstadoMatricular(boton) {
     const activar = boton.classList.contains("btn-outline-success");
     const asignaturaId = boton.dataset.asignaturaId;

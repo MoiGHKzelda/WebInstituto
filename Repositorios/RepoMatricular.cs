@@ -1,28 +1,28 @@
 ﻿using WebInstituto.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace WebInstituto.Repositorios
 {
     public class RepoMatricular
     {
+        // Contexto de base de datos.
         private readonly DBSqlite Db;
 
+        // Constructor que recibe el contexto.
         public RepoMatricular(DBSqlite db)
         {
             this.Db = db;
         }
 
-        // Método para crear una matrícula
-        public AsignaturaPersona crearMatriculacion(AsignaturaPersona personaMatricular)
+        // Crea una nueva matrícula de alumno en una asignatura.
+        public AsignaturaPersona CrearMatriculacion(AsignaturaPersona personaMatricular)
         {
-            // Agregamos la nueva matrícula a la base de datos
             Db.AsignaturaPersona.Add(personaMatricular);
             Db.SaveChanges();
             return personaMatricular;
         }
 
-        // Método para eliminar una matrícula
-        public void eliminarMatriculacion(AsignaturaPersona personaMatricular)
+        // Elimina una matrícula existente.
+        public void EliminarMatriculacion(AsignaturaPersona personaMatricular)
         {
             var matricula = Db.AsignaturaPersona
                 .FirstOrDefault(m => m.IdAsignatura == personaMatricular.IdAsignatura && m.IdAlumno == personaMatricular.IdAlumno);
@@ -34,7 +34,7 @@ namespace WebInstituto.Repositorios
             }
         }
 
-        // Método para verificar si el estudiante ya está matriculado en la asignatura
+        // Verifica si un alumno ya está matriculado en una asignatura.
         public bool ExisteMatriculacion(AsignaturaPersona personaMatricular)
         {
             return Db.AsignaturaPersona

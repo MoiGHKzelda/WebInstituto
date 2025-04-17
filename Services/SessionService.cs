@@ -33,7 +33,7 @@ namespace WebInstituto.Services
             var email = _httpContextAccessor.HttpContext.Session.GetString("email");
             return !string.IsNullOrEmpty(email);
         }
-
+        //Comprueba si es profesor
         public bool EsProfesor()
         {
             int? teacher = _httpContextAccessor.HttpContext.Session.GetInt32("isTeacher");
