@@ -43,7 +43,7 @@ namespace WebInstituto.Services
             }
             return false;
         }
-        //Mail profesor
+        // Obtiene el mail de una persona
         public string GetMailPersona()
         {
             return _httpContextAccessor.HttpContext.Session.GetString("email");
