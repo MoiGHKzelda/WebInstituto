@@ -25,7 +25,7 @@ namespace WebInstituto.Controllers
         {
             if (!sessionService.EstaLogeado())
             {
-                return (ActionResult)sessionService.NoLogin(); // Redirige si no hay sesión activa.
+                return (ActionResult)sessionService.NoLogin();
             }
 
             ViewBag.EstaLogeado = sessionService.EstaLogeado();
