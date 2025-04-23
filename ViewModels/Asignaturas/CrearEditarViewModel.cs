@@ -13,7 +13,6 @@ namespace WebInstituto.ViewModels.Asignaturas
 
         public CrearEditarAsignaturasViewModel()
         {
-            // Inicializar por seguridad para evitar null reference
             Asignatura = new Asignatura();
             Cursos = new List<SelectListItem>();
         }

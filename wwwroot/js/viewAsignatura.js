@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-//Cambiar estado de impartir 
+//Cambiar estado de impartir
 function cambiarEstadoImpartir(boton) {
     const activar = boton.classList.contains("btn-outline-success");
     const asignaturaId = boton.dataset.asignaturaId;
