@@ -1,6 +1,4 @@
-﻿using BCrypt.Net;
-
-namespace Proyecto.Services
+﻿namespace Proyecto.Services
 {
     public static class SeguridadService
     {
