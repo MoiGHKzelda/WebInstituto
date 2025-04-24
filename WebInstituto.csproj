@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <None Include="wwwroot\css\site.css" />
-    <None Include="wwwroot\css\vistas.css" />
     <None Include="wwwroot\favicon.ico" />
     <None Include="wwwroot\img\editar.png" />
     <None Include="wwwroot\img\eliminar.png" />
