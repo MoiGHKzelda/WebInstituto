@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.UserSecrets;
+using Proyecto.Services;
 using WebInstituto.Models;
 
 namespace WebInstituto
@@ -9,8 +11,7 @@ namespace WebInstituto
 
         public DBSqlite()
         {
-            var path = "C:\\Users\\moises.rico\\Desktop\\WebInstituto\\BBDD\\";
-            _pathDB = Path.Combine(path, "institutoEF.sqlite");
+            _pathDB = Proyecto.Services.PathHelper.GetDatabasePath();
         }
         public DbSet<Persona> Persona { get; set; }
         public DbSet<Asignatura> Asignatura { get; set; }
