@@ -117,6 +117,16 @@ namespace WebInstituto.Controllers
             ViewBag.EstaLogeado = sessionService.EstaLogeado();
 
             var asignatura = repoAsignaturas.GetById(id);
+
+            //  Ordena los horarios
+            if (asignatura.Horarios != null)
+            {
+                asignatura.Horarios = asignatura.Horarios
+                    .OrderBy(h => h.Day)
+                    .ThenBy(h => h.Start)
+                    .ToList();
+            }
+
             var personaMail = sessionService.GetMailPersona();
             var persona = repoPersonas.GetByEmail(personaMail);
 

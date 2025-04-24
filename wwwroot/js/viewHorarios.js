@@ -9,16 +9,18 @@
             window.location.href = `/Horarios/FormularioCrearHorario?asignaturaId=${asignaturaId}&horarioId=${horarioId}`;
         });
     });
-
     // --- Eliminar Horario ---
     document.querySelectorAll('img[id^="eliminar-h-"]').forEach(function (btn) {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
-            let id = this.id.split('-')[2]; 
+
+            let horarioId = this.id.split('-')[2];
             let asignaturaId = this.closest('a').href.split('asignaturaId=')[1].split('&')[0];
 
             if (confirm("¿Estás seguro de que deseas eliminar este horario?")) {
-                fetch(this.closest('a').href, {
+                let url = `/Horarios/EliminarHorario?asignaturaId=${asignaturaId}&horarioId=${horarioId}`;
+
+                fetch(url, {
                     method: 'GET'
                 })
                     .then(response => {
@@ -35,7 +37,4 @@
             }
         });
     });
-
-
-
 });

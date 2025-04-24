@@ -1,6 +1,6 @@
 ﻿namespace Proyecto.Services
 {
-    public static class PathHelper
+    public static class GetPath
     {
         public static string GetDatabasePath()
         {

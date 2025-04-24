@@ -150,7 +150,7 @@ namespace WebInstituto.Controllers
         }
 
         // Elimina un horario según su ID.
-        [HttpPost]
+        [HttpGet]
         public IActionResult EliminarHorario(int asignaturaId, int horarioId)
         {
             bool eliminado = repoHorarios.EliminarHorario(horarioId);
@@ -164,5 +164,6 @@ namespace WebInstituto.Controllers
                 return NotFound(new { success = false, message = "No se encontró el horario o no se pudo eliminar." });
             }
         }
+
     }
 }
