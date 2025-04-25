@@ -54,10 +54,10 @@
                             @if (Model.EsProfesor)
                             {
                                 <td class="border-0  text-center align-middle">
-                                    <a href="@Url.Action("FormularioCrearHorario", "Horarios", new { asignaturaId = Model.Asignatura.Id, horarioId = horario.Id })">
+                                    <a href="@Url.Action("FormularioCrearHorario", "Horarios", new { asignaturaId = Model.Asignatura.Id, horarioId = horario.Id })" style="text-decoration: none;">
                                         <img src="/img/editar.png" style="width:25px; height:25px; cursor:pointer;" class="me-1" />
                                     </a>
-                                    <a href="@Url.Action("EliminarHorario", "Horarios", new { asignaturaId = Model.Asignatura.Id,horarioId = horario.Id })">
+                                    <a href="@Url.Action("EliminarHorario", "Horarios", new { asignaturaId = Model.Asignatura.Id,horarioId = horario.Id })" style="text-decoration: none;">
                                         <img src="/img/eliminar.png" id="eliminar-h-@horario.Id" style="width:25px; height:25px; cursor:pointer;" />
                                     </a>                                    
                                 </td>
