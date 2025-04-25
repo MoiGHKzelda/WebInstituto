@@ -31,8 +31,5 @@ namespace WebInstituto
             modelBuilder.Entity<AsignaturaPersona>().HasOne(p => p.Alumno).WithMany(a => a.AsignaturasAlumno).HasForeignKey(p=>p.IdAlumno);
             modelBuilder.Entity<AsignaturaPersona>().HasOne(a => a.Asignatura).WithMany(p => p.Alumnos).HasForeignKey(p => p.IdAsignatura);
         }
-
-
     }
-
 }
